@@ -1,8 +1,5 @@
 package com.mikhalov.homework2;
 
-
-import java.util.Arrays;
-
 public class HomeWork2 {
 
     public static void main(String[] args) {
