@@ -7,10 +7,9 @@ public class HomeWork5 {
 
     public static int IndexOfLastMaxNum() {
         int[] arr = createIntRandArr(12, -15, 16);
-        int indexOfMaxElement = -1;
-        for (int i = 0, maxElement = Integer.MIN_VALUE; i < arr.length; i++) {
-            if (arr[i] >= maxElement) {
-                maxElement = arr[i];
+        int indexOfMaxElement = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] >= arr[indexOfMaxElement]) {
                 indexOfMaxElement = i;
             }
         }
@@ -38,8 +37,8 @@ public class HomeWork5 {
         int[] secondArr = createIntRandArr(5, 0, 6);
         System.out.printf("first array: %s%n" + "second array: %s%n",
                 Arrays.toString(firstArr), Arrays.toString(secondArr));
-        double firstAverage = Arrays.stream(firstArr).average().getAsDouble();//ok or not?
-        double secondAverage = Arrays.stream(secondArr).average().getAsDouble();//?
+        double firstAverage = Arrays.stream(firstArr).average().getAsDouble();
+        double secondAverage = Arrays.stream(secondArr).average().getAsDouble();
         if (firstAverage > secondAverage) {
             System.out.printf("first array have bigger average = %.2f", firstAverage);
         } else if (firstAverage < secondAverage) {
@@ -47,6 +46,20 @@ public class HomeWork5 {
         } else {
             System.out.printf("arrays have equal average = %.2f", secondAverage);
         }
+    }
+
+    public static void bubbleSort(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 1; j < arr.length - i; j++) {
+                if (arr[j - 1] > arr[j]) {
+                    swap(arr, j - 1, j);
+                }
+            }
+        }
+    }
+
+    private static void swap(int[] arr, int num1, int num2) {
+        arr[num2] = arr[num2] + arr[num1] - (arr[num1] = arr[num2]);
     }
 
     private static int[] createIntRandArr(int length, int rangeFrom, int to) {
