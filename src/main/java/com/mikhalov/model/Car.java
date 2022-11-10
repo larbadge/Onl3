@@ -9,15 +9,14 @@ public class Car {
     private int price;
 
     public Car() {
-        this.count = 1;
-        this.price = (int) (Math.random() * 10001 + 10000);
     }
 
     public Car(String manufacturer, String engine, String color) {
-        this();
         this.manufacturer = manufacturer;
         this.engine = engine;
         this.color = color;
+        this.count = 1;
+        this.price = (int) (Math.random() * 10001 + 10000);
     }
 
     public String getManufacturer() {
@@ -61,8 +60,8 @@ public class Car {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("{Manufacturer: %s; Engine: %s; Color: %s; Count %d} price %d$"
-                , getManufacturer(), getEngine(),getColor(),getCount(), getPrice());
+                , getManufacturer(), getEngine(), getColor(), getCount(), getPrice());
     }
 }

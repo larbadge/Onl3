@@ -1,15 +1,16 @@
 package com.mikhalov.service;
 
 import com.mikhalov.model.Car;
+
 import java.util.Random;
 
 public class CarService {
 
-    public static Car create() {
-        return new Car(getRandomString(), getRandomString(),getRandomString());
+    public Car create() {
+        return new Car(getRandomString(), getRandomString(), getRandomString());
     }
 
-    public static void print(Car ... cars) {
+    public void print(Car... cars) {
         for (Car car : cars) {
             System.out.println(car);
         }
@@ -18,8 +19,8 @@ public class CarService {
     private static String getRandomString() {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
-        int length = random.nextInt(4,10);
-        String str="abcdefghijklmnopqrstuvwxyz";
+        int length = random.nextInt(4, 10);
+        String str = "abcdefghijklmnopqrstuvwxyz";
         for (int i = 0; i < length; i++) {
             sb.append(str.charAt(random.nextInt(str.length())));
         }
