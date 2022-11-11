@@ -32,11 +32,12 @@ public class CarService {
     }
 
     public void insert(Car car, int index) {
-        checkId(car.getId());
         if (index < 0) {
             throw new IllegalArgumentException("index less than 0");
         }
-        carArrayRepository.insert(car, index);
+        if (car != null) {
+            carArrayRepository.insert(car, index);
+        }
     }
 
     public Car find(String id) {
@@ -80,6 +81,18 @@ public class CarService {
         changeColor(id, getRandomColor());
     }
 
+    private void check(Car car) {
+        checkId(car.getId());
+        if (car.getCount() < 1) {
+            System.out.println("This car is not available");
+        }
+        if (car.getEngine().getPower() < 200) {
+            System.out.println("Car power less than 200 hp");
+        } else if (car.getCount() > 0) {
+            System.out.println("Car ready to sell");
+        }
+    }
+
     private Color getRandomColor() {
         Color[] colors = Color.values();
         return colors[random.nextInt(colors.length)];
@@ -98,18 +111,6 @@ public class CarService {
             sb.append(str.charAt(random.nextInt(str.length())));
         }
         return sb.toString();
-    }
-
-    private void check(Car car) {
-        checkId(car.getId());
-        if (car.getCount() < 1) {
-            System.out.println("This car is not available");
-        }
-        if (car.getEngine().getPower() < 200) {
-            System.out.println("Car power less than 200 hp");
-        } else if (car.getCount() > 0) {
-            System.out.println("Car ready to sell");
-        }
     }
 
     private void checkId(String id) {
