@@ -1,22 +1,30 @@
 package com.mikhalov.model;
 
+import java.util.Random;
+import java.util.UUID;
+
 public class Car {
 
+    final static Random random = new Random();
+
     private String manufacturer;
-    private String engine;
-    private String color;
+    private Engine engine;
+    private Color color;
     private int count;
     private int price;
+    private final String id;
 
     public Car() {
+        this.id = UUID.randomUUID().toString();
     }
 
-    public Car(String manufacturer, String engine, String color) {
+    public Car(String manufacturer, Engine engine, Color color) {
         this.manufacturer = manufacturer;
         this.engine = engine;
         this.color = color;
         this.count = 1;
         this.price = (int) (Math.random() * 10001 + 10000);
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getManufacturer() {
@@ -27,19 +35,19 @@ public class Car {
         this.manufacturer = manufacturer;
     }
 
-    public String getEngine() {
+    public Engine getEngine() {
         return engine;
     }
 
-    public void setEngine(String engine) {
+    public void setEngine(Engine engine) {
         this.engine = engine;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
@@ -59,9 +67,13 @@ public class Car {
         this.price = price;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
-        return String.format("{Manufacturer: %s; Engine: %s; Color: %s; Count %d} price %d$"
+        return String.format("{Manufacturer: %s; Engine: %s; Color: %s; Count %d; Price %d$}"
                 , getManufacturer(), getEngine(), getColor(), getCount(), getPrice());
     }
 }
