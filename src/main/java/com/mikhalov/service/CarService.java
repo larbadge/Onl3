@@ -40,7 +40,7 @@ public class CarService {
         }
     }
 
-    public Car find(String id) {
+    public Car find(String id)  {
         checkId(id);
         return carArrayRepository.getById(id);
     }
@@ -54,7 +54,7 @@ public class CarService {
         return carArrayRepository.getAll();
     }
 
-    public void printById(String id) {
+    public void print(String id) {
         checkId(id);
         System.out.println(carArrayRepository.getById(id));
     }

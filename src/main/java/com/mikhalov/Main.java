@@ -11,11 +11,8 @@ public class Main {
         carService.printAll();
 
         System.out.println();
-        carService.insert(carService.createNewCar(), 0);
-        carService.printAll();
-
-        System.out.println();
         carService.check(carService.getAll());
+
     }
 }
 

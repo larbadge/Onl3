@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 
 public class CarArrayRepository {
 
-    private static Car[] cars = new Car[10];
+    private static Car[] cars = new Car[3];
 
     public void save(Car car) {
         increaseArrayIfNeeds();
@@ -21,20 +21,15 @@ public class CarArrayRepository {
         if (index >= length) {
             putCar(car);
         } else {
-            System.arraycopy(cars, index, cars, index + 1,
-                    length - index);
+            System.arraycopy(cars, index, cars, index + 1, length - index);
             cars[index] = car;
         }
     }
 
     public Car getById(String id) {
-        for (Car car : cars) {
-            if (car.getId().equals(id)) {
-                return car;
-            }
-        }
-        return null;
+        return cars[indexById(id)];
     }
+
 
     public Car[] getAll() {
         return Arrays.copyOf(cars, findLength());
@@ -52,9 +47,7 @@ public class CarArrayRepository {
     }
 
     private void delete(int index, int length) {
-        if (index == cars.length) {
-            throw new NoSuchElementException("Car with this ID doesn`t exist");
-        } else if (index == length - 1) {
+        if (index == length - 1) {
             cars[index] = null;
         } else if (cars.length == length) {
             shiftArray(index);
@@ -70,8 +63,7 @@ public class CarArrayRepository {
     }
 
     private void increaseArrayIfNeeds() {
-        int length = findLength();
-        if (length == cars.length) {
+        if (findLength() == cars.length) {
             increaseArray();
         }
     }
@@ -89,18 +81,17 @@ public class CarArrayRepository {
 
     private int indexById(String id) {
         int index = 0;
-        for (Car car : cars) {
+        for (Car car : getAll()) {
             if (car.getId().equals(id)) {
-                break;
+                return index;
             }
             index++;
         }
-        return index;
+        throw new NoSuchElementException("Wrong ID");
     }
 
     private void putCar(Car car) {
-        int length = findLength();
-        cars[length] = car;
+        cars[findLength()] = car;
     }
 
     private void increaseArray() {
