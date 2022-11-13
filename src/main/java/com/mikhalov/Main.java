@@ -1,17 +1,19 @@
 package com.mikhalov;
 
-import com.mikhalov.model.Car;
+import com.mikhalov.repository.CarArrayRepository;
 import com.mikhalov.service.CarService;
 
 public class Main {
 
     public static void main(String[] args) {
-        CarService carService = new CarService();
-        Car firstCar = carService.create();
-        Car secondCar = carService.create();
-        Car thirdCar = carService.create();
-        carService.print(firstCar, secondCar, thirdCar);
+        CarService carService = new CarService(new CarArrayRepository());
+        carService.create(3);
+        carService.printAll();
+
+        System.out.println();
+        carService.check(carService.getAll());
+
     }
-
-
 }
+
+
