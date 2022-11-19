@@ -7,8 +7,8 @@ public class Main {
 
     public static void main(String[] args) {
         CarService carService = new CarService(new CarArrayRepository());
-        carService.create(3);
-        carService.printAll();
+        int count = carService.create();
+        System.out.println(count);
 
         System.out.println();
         carService.check(carService.getAll());
