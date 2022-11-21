@@ -29,7 +29,7 @@ public class CarService {
         return count;
     }
 
-    private Car createNewCar() {
+    public Car createNewCar() {
         return new Car(RandomGenerator.getRandomString(),
                 RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
     }
@@ -43,7 +43,7 @@ public class CarService {
         }
     }
 
-    public Car find(String id)  {
+    public Car find(String id) {
         checkId(id);
         return carArrayRepository.getById(id);
     }
@@ -63,13 +63,12 @@ public class CarService {
     }
 
     public void printAll() {
-        Car[] cars = getAll();
-        for (Car car : cars) {
+        for (Car car : getAll()) {
             System.out.println(car);
         }
     }
 
-    public void check(Car ... cars) {
+    public void check(Car... cars) {
         for (Car car : cars) {
             check(car);
         }
@@ -97,7 +96,7 @@ public class CarService {
     }
 
     private void checkId(String id) {
-        if (id == null || id.isEmpty()) {
+        if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("id shouldn`t be empty");
         }
     }

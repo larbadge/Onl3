@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 
 public class CarArrayRepository {
 
-    private static Car[] cars = new Car[3];
+    private static Car[] cars = new Car[10];
 
     public void save(Car car) {
         increaseArrayIfNeeds();

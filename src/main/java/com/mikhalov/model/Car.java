@@ -1,5 +1,6 @@
 package com.mikhalov.model;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
 public class Car {
 
     final static Random random = new Random();
-
+    @Setter(AccessLevel.NONE)
     private String manufacturer;
     private Engine engine;
     private Color color;
