@@ -54,13 +54,14 @@ class CarServiceTest {
         try {
             Method method = CarService.class.getDeclaredMethod("checkId", String.class);
             method.setAccessible(true);
-            assertThrows(IllegalArgumentException.class, () -> {
+            var exception = assertThrows(IllegalArgumentException.class, () -> {
                 try {
                     method.invoke(target, id);
                 } catch (InvocationTargetException e) {
                     throw e.getCause();
                 }
             });
+            assertEquals("id shouldn`t be empty", exception.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }

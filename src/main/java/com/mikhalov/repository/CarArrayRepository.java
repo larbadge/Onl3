@@ -2,15 +2,16 @@ package com.mikhalov.repository;
 
 import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
+import lombok.NonNull;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class CarArrayRepository {
 
-    private static Car[] cars = new Car[10];
+    private static Car[] cars = new Car[3];
 
-    public void save(Car car) {
+    public void save(@NonNull Car car) {
         increaseArrayIfNeeds();
         putCar(car);
     }
@@ -44,6 +45,13 @@ public class CarArrayRepository {
         int index = indexById(id);
         int length = findLength();
         delete(index, length);
+    }
+
+    public void deleteAll() {
+        for (Car car : getAll()) {
+            delete(car.getId());
+
+        }
     }
 
     private void delete(int index, int length) {
@@ -81,6 +89,8 @@ public class CarArrayRepository {
 
     private int indexById(String id) {
         int index = 0;
+        if (id == null || id.isBlank())
+            throw new NoSuchElementException("Wrong ID");
         for (Car car : getAll()) {
             if (car.getId().equals(id)) {
                 return index;
