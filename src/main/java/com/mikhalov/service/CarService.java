@@ -97,7 +97,7 @@ public class CarService {
 
     private void checkId(String id) {
         if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("id shouldn`t be empty");
+            throw new IllegalArgumentException("ID shouldn`t be empty");
         }
     }
 }

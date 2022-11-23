@@ -3,6 +3,7 @@ package com.mikhalov.repository;
 import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
 import com.mikhalov.util.RandomGenerator;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,12 +27,20 @@ class CarArrayRepositoryTest {
         car = new Car(RandomGenerator.getRandomString(), RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
     }
 
+    @AfterEach
+    void tearDown() {
+        repository.deleteAll();
+    }
+
     @Test
     void saveTest() {
         repository.save(car);
         assertEquals(car, repository.getById(car.getId()));
-        repository.deleteAll();
+    }
 
+    @Test
+    void saveNullTest() {
+        assertThrows(NullPointerException.class, () -> repository.save(null));
     }
 
     @Test
@@ -48,11 +57,10 @@ class CarArrayRepositoryTest {
         assertEquals(car, cars[2]);
         assertEquals(carToInsert, cars[1]);
         assertEquals(carToInsert2, cars[3]);
-        repository.deleteAll();
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         repository.save(new Car());
         repository.save(car);
         repository.save(new Car());
@@ -62,15 +70,14 @@ class CarArrayRepositoryTest {
     }
 
     @Test
-    void getById() {
+    void getByIdTest() {
         repository.save(car);
         Car actual = repository.getById(car.getId());
         assertEquals(car, actual);
-        repository.deleteAll();
     }
 
     @Test
-    void getAll() {
+    void getAllTest() {
         repository.save(new Car());
         repository.save(new Car());
         repository.save(new Car());
@@ -78,11 +85,10 @@ class CarArrayRepositoryTest {
         Car[] cars = repository.getAll();
         assertEquals(4, cars.length);
         assertEquals(car, cars[3]);
-        repository.deleteAll();
     }
 
     @Test
-    void updateColor() {
+    void updateColorTest() {
         repository.save(car);
         Color original = car.getColor();
         Color toUpdate;
@@ -90,7 +96,6 @@ class CarArrayRepositoryTest {
         while (original.equals(toUpdate));
         repository.updateColor(car.getId(), toUpdate);
         assertNotEquals(original, car.getColor());
-        repository.deleteAll();
     }
 
     @ParameterizedTest
@@ -113,7 +118,6 @@ class CarArrayRepositoryTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        repository.deleteAll();
     }
 
     @Test
@@ -128,7 +132,6 @@ class CarArrayRepositoryTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        repository.deleteAll();
     }
 
     @Test
@@ -154,10 +157,9 @@ class CarArrayRepositoryTest {
             method.setAccessible(true);
             int actual = (int) method.invoke(repository);
             assertEquals(count, actual);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        repository.deleteAll();
     }
 
 

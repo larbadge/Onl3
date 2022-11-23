@@ -61,7 +61,7 @@ class CarServiceTest {
                     throw e.getCause();
                 }
             });
-            assertEquals("id shouldn`t be empty", exception.getMessage());
+            assertEquals("ID shouldn`t be empty", exception.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }

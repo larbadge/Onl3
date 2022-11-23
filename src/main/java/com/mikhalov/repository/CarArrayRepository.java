@@ -89,8 +89,6 @@ public class CarArrayRepository {
 
     private int indexById(String id) {
         int index = 0;
-        if (id == null || id.isBlank())
-            throw new NoSuchElementException("Wrong ID");
         for (Car car : getAll()) {
             if (car.getId().equals(id)) {
                 return index;
