@@ -36,10 +36,10 @@ class CarServiceTest {
 
     @Test
     void createTest() {
-        repository = new CarArrayRepository(); // otherwise test fails because of printAll() method.
-        target = new CarService(repository);   // I prefer to delete it from create() method(it`s homework`s condition)
+        Mockito.doReturn(new Car[0]).when(repository).getAll();
         int expected = target.create();
         Assertions.assertTrue(expected == -1 || (expected > 0 && expected <= 10));
+        System.out.println(expected);
     }
 
     @Test
