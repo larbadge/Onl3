@@ -1,12 +1,18 @@
 package com.mikhalov.model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Random;
 import java.util.UUID;
 
+@Getter
+@Setter
 public class Car {
 
     final static Random random = new Random();
-
+    @Setter(AccessLevel.NONE)
     private String manufacturer;
     private Engine engine;
     private Color color;
@@ -25,50 +31,6 @@ public class Car {
         this.count = 1;
         this.price = (int) (Math.random() * 10001 + 10000);
         this.id = UUID.randomUUID().toString();
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    public Engine getEngine() {
-        return engine;
-    }
-
-    public void setEngine(Engine engine) {
-        this.engine = engine;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getId() {
-        return id;
     }
 
     @Override

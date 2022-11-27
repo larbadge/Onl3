@@ -2,16 +2,12 @@ package com.mikhalov.service;
 
 import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
-import com.mikhalov.model.Engine;
 import com.mikhalov.repository.CarArrayRepository;
-
-import java.util.Random;
+import com.mikhalov.util.RandomGenerator;
 
 public class CarService {
 
     private final CarArrayRepository carArrayRepository;
-
-    final Random random = new Random();
 
     public CarService(final CarArrayRepository carArrayRepository) {
         this.carArrayRepository = carArrayRepository;
@@ -19,16 +15,23 @@ public class CarService {
 
     public void create(int count) {
         for (; count > 0; count--) {
-            create();
+            carArrayRepository.save(createNewCar());
         }
     }
 
-    public void create() {
-        carArrayRepository.save(createNewCar());
+    public int create() {
+        int count = RandomGenerator.generateRandomNum();
+        if (count == 0) {
+            return -1;
+        }
+        create(count);
+        printAll();
+        return count;
     }
 
     public Car createNewCar() {
-        return new Car(getRandomString(), getRandomEngine(), getRandomColor());
+        return new Car(RandomGenerator.getRandomString(),
+                RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
     }
 
     public void insert(Car car, int index) {
@@ -40,7 +43,7 @@ public class CarService {
         }
     }
 
-    public Car find(String id)  {
+    public Car find(String id) {
         checkId(id);
         return carArrayRepository.getById(id);
     }
@@ -60,13 +63,12 @@ public class CarService {
     }
 
     public void printAll() {
-        Car[] cars = getAll();
-        for (Car car : cars) {
+        for (Car car : getAll()) {
             System.out.println(car);
         }
     }
 
-    public void check(Car ... cars) {
+    public void check(Car... cars) {
         for (Car car : cars) {
             check(car);
         }
@@ -78,7 +80,7 @@ public class CarService {
     }
 
     public void changeColor(String id) {
-        changeColor(id, getRandomColor());
+        changeColor(id, RandomGenerator.getRandomColor());
     }
 
     private void check(Car car) {
@@ -93,29 +95,9 @@ public class CarService {
         }
     }
 
-    private Color getRandomColor() {
-        Color[] colors = Color.values();
-        return colors[random.nextInt(colors.length)];
-    }
-
-    private Engine getRandomEngine() {
-        Engine.EngineType[] types = Engine.EngineType.values();
-        return new Engine(types[random.nextInt(types.length)], random.nextInt(1001));
-    }
-
-    private String getRandomString() {
-        StringBuilder sb = new StringBuilder();
-        int length = random.nextInt(4, 10);
-        String str = "abcdefghijklmnopqrstuvwxyz";
-        for (int i = 0; i < length; i++) {
-            sb.append(str.charAt(random.nextInt(str.length())));
-        }
-        return sb.toString();
-    }
-
     private void checkId(String id) {
-        if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("id shouldn`t be empty");
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID shouldn`t be empty");
         }
     }
 }
