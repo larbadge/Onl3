@@ -2,6 +2,8 @@ package com.mikhalov.service;
 
 import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
+import com.mikhalov.model.PassengerCar;
+import com.mikhalov.model.Truck;
 import com.mikhalov.repository.CarArrayRepository;
 import com.mikhalov.util.RandomGenerator;
 
@@ -13,9 +15,9 @@ public class CarService {
         this.carArrayRepository = carArrayRepository;
     }
 
-    public void create(int count) {
+    public void create(int count, Car.CarType carType) {
         for (; count > 0; count--) {
-            carArrayRepository.save(createNewCar());
+            carArrayRepository.save(createNewCar(carType));
         }
     }
 
@@ -29,9 +31,34 @@ public class CarService {
         return count;
     }
 
-    public Car createNewCar() {
-        return new Car(RandomGenerator.getRandomString(),
+    private void create(int count) {
+        for (; count > 0; count--) {
+           createNewCar(RandomGenerator.getRandomCarType());
+        }
+    }
+
+    public Car createNewCar(Car.CarType carType) {
+        if (carType.equals(Car.CarType.CAR)) {
+            return createPassengerCar();
+        } else if (carType.equals(Car.CarType.TRUCK)) {
+            return createTruck();
+        } else {
+            return null;
+        }
+    }
+
+    public Car createPassengerCar() {
+        Car car = new PassengerCar(RandomGenerator.getRandomString(),
                 RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
+        carArrayRepository.save(car);
+        return car;
+    }
+
+    public Car createTruck() {
+        Car car = new Truck(RandomGenerator.getRandomString(),
+                RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
+        carArrayRepository.save(car);
+        return car;
     }
 
     public void insert(Car car, int index) {
