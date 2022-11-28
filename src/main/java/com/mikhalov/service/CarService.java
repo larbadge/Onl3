@@ -38,12 +38,16 @@ public class CarService {
     }
 
     public Car createNewCar(Car.CarType carType) {
-        if (carType.equals(Car.CarType.CAR)) {
-            return createPassengerCar();
-        } else if (carType.equals(Car.CarType.TRUCK)) {
-            return createTruck();
-        } else {
-            return null;
+        switch (carType) {
+            case CAR -> {
+                return createPassengerCar();
+            }
+            case TRUCK -> {
+                return createTruck();
+            }
+            default -> {
+                return null;
+            }
         }
     }
 
@@ -111,6 +115,9 @@ public class CarService {
     }
 
     private void check(Car car) {
+        if (car.getEngine() == null) {
+            return;
+        }
         checkId(car.getId());
         if (car.getCount() < 1) {
             System.out.println("This car is not available");

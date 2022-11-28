@@ -1,6 +1,6 @@
 package com.mikhalov.model;
 
-public class PassengerCar extends Car implements CountRestore{
+public class PassengerCar extends Car {
 
     private int passengerCount;
 
@@ -19,6 +19,6 @@ public class PassengerCar extends Car implements CountRestore{
 
     @Override
     public String toString() {
-        return "Passenger Car-" + super.toString();
+        return "Passenger car " + super.toString();
     }
 }

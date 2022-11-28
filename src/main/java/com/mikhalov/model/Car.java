@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public abstract class Car {
+public abstract class Car implements CountRestore {
 
     @Setter(AccessLevel.NONE)
     private String manufacturer;

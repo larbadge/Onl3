@@ -1,6 +1,6 @@
 package com.mikhalov.model;
 
-public class Truck extends Car implements CountRestore{
+public class Truck extends Car {
 
     private int loadCapacity;
 
@@ -19,7 +19,7 @@ public class Truck extends Car implements CountRestore{
 
     @Override
     public String  toString() {
-        return "Truck -" + super.toString();
+        return "Truck " + super.toString();
 
     }
 }
