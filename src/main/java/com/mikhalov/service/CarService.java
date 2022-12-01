@@ -88,17 +88,13 @@ public class CarService {
     }
 
     public Car createNewCar(Car.CarType carType) {
-        switch (carType) {
-            case CAR -> {
-                return createPassengerCar();
-            }
-            case TRUCK -> {
-                return createTruck();
-            }
+        return switch (carType) {
+            case CAR -> createPassengerCar();
+            case TRUCK -> createTruck();
             default -> {
                 throw new IllegalArgumentException();
             }
-        }
+        };
     }
 
     private Car createPassengerCar() {
