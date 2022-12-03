@@ -2,6 +2,8 @@ package com.mikhalov.repository;
 
 import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
+import com.mikhalov.model.PassengerCar;
+import com.mikhalov.model.Truck;
 import com.mikhalov.util.RandomGenerator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +26,8 @@ class CarArrayRepositoryTest {
     @BeforeEach
     void setUp() {
         repository = new CarArrayRepository();
-        car = new Car(RandomGenerator.getRandomString(), RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
+        car = new PassengerCar(RandomGenerator.getRandomString(),
+                RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
     }
 
     @AfterEach
@@ -45,11 +48,11 @@ class CarArrayRepositoryTest {
 
     @Test
     void insertTest() {
-        repository.save(new Car());
+        repository.save(new PassengerCar());
         repository.save(car);
-        Car carToInsert = new Car(RandomGenerator.getRandomString(),
+        Car carToInsert = new PassengerCar(RandomGenerator.getRandomString(),
                 RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
-        Car carToInsert2 = new Car(RandomGenerator.getRandomString(),
+        Car carToInsert2 = new Truck(RandomGenerator.getRandomString(),
                 RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
         repository.insert(carToInsert, 1);
         repository.insert(carToInsert2, 5);
@@ -61,10 +64,10 @@ class CarArrayRepositoryTest {
 
     @Test
     void deleteTest() {
-        repository.save(new Car());
+        repository.save(new PassengerCar());
         repository.save(car);
-        repository.save(new Car());
-        repository.save(new Car());
+        repository.save(new Truck());
+        repository.save(new PassengerCar());
         repository.deleteAll();
         assertEquals(0, repository.getAll().length);
     }
@@ -78,9 +81,9 @@ class CarArrayRepositoryTest {
 
     @Test
     void getAllTest() {
-        repository.save(new Car());
-        repository.save(new Car());
-        repository.save(new Car());
+        repository.save(new PassengerCar());
+        repository.save(new Truck());
+        repository.save(new PassengerCar());
         repository.save(car);
         Car[] cars = repository.getAll();
         assertEquals(4, cars.length);
@@ -102,7 +105,7 @@ class CarArrayRepositoryTest {
     @ValueSource(strings = {"abc", "slf", "123", "14242421412", "", " "})
     @NullSource
     void indexByWrongIdTest(String id) {
-        repository.save(new Car());
+        repository.save(new Truck());
         repository.save(car);
         try {
             Method method = CarArrayRepository.class.getDeclaredMethod("indexById", String.class);
@@ -122,7 +125,7 @@ class CarArrayRepositoryTest {
 
     @Test
     void indexByIdTest() {
-        repository.save(new Car());
+        repository.save(new PassengerCar());
         repository.save(car);
         try {
             Method method = CarArrayRepository.class.getDeclaredMethod("indexById", String.class);
@@ -150,7 +153,7 @@ class CarArrayRepositoryTest {
     void findLengthTest() {
         int count = RandomGenerator.generateRandomNum();
         for (int i = 0; i < count; i++) {
-            repository.save(new Car());
+            repository.save(new PassengerCar());
         }
         try {
             Method method = CarArrayRepository.class.getDeclaredMethod("findLength");

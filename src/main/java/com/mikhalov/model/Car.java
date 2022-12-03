@@ -4,14 +4,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Random;
 import java.util.UUID;
 
 @Getter
 @Setter
-public class Car {
+public abstract class Car implements CountRestore {
 
-    final static Random random = new Random();
     @Setter(AccessLevel.NONE)
     private String manufacturer;
     private Engine engine;
@@ -31,6 +29,11 @@ public class Car {
         this.count = 1;
         this.price = (int) (Math.random() * 10001 + 10000);
         this.id = UUID.randomUUID().toString();
+    }
+
+    public enum CarType {
+        CAR,
+        TRUCK
     }
 
     @Override

@@ -7,8 +7,8 @@
     <groupId>org.example</groupId>
     <artifactId>oln3</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <dependencies>
 
+    <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -36,14 +36,17 @@
             <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M7</version>
+            </plugin>
+        </plugins>
+    </build>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>

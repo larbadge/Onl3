@@ -1,5 +1,6 @@
 package com.mikhalov.util;
 
+import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
 import com.mikhalov.model.Engine;
 
@@ -31,5 +32,10 @@ public class RandomGenerator {
     public static Color getRandomColor() {
         Color[] colors = Color.values();
         return colors[random.nextInt(colors.length)];
+    }
+
+    public static Car.CarType getRandomCarType() {
+        Car.CarType[] types = Car.CarType.values();
+        return types[random.nextInt(types.length)];
     }
 }

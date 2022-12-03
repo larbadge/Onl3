@@ -2,6 +2,7 @@ package com.mikhalov.repository;
 
 import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
+import com.mikhalov.model.PassengerCar;
 import lombok.NonNull;
 
 import java.util.Arrays;
