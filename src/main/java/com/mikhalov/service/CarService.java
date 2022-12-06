@@ -1,11 +1,11 @@
 package com.mikhalov.service;
 
-import com.mikhalov.model.Car;
-import com.mikhalov.model.Color;
-import com.mikhalov.model.PassengerCar;
-import com.mikhalov.model.Truck;
+import com.mikhalov.model.*;
 import com.mikhalov.repository.CarArrayRepository;
 import com.mikhalov.util.RandomGenerator;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 public class CarService {
 
@@ -15,9 +15,55 @@ public class CarService {
         this.carArrayRepository = carArrayRepository;
     }
 
+    public void printManufacturerAndCount(Car car) {
+        Optional.ofNullable(car)
+                .ifPresent(c -> System.out.printf("Manufacturer: %s, count = %d%n", c.getManufacturer(), c.getCount()));
+    }
+
+    public void printColor(Car car) {
+        Optional.ofNullable(car)
+                .map(Car::getColor)
+                .ifPresentOrElse(System.out::println, this::printRandomCarColor);
+    }
+
+    public void checkCount(Car car) {
+        Car forCheck = Optional.ofNullable(car)
+                .filter(car1 -> car1.getCount() > 10)
+                .orElseThrow(UserInputException::new);
+        printManufacturerAndCount(forCheck);
+    }
+
+    public void checkCount(Car[] cars) {
+        Arrays.stream(cars).forEach(this::checkCount);
+    }
+
+    public void printEngineInfo(Car car) {
+        Optional.ofNullable(car)
+                .or(() -> {
+                    System.out.println("No car, new random car will be created");
+                    return Optional.of(createNewRandomCar());
+                })
+                .map(c -> c.getEngine().getPower())
+                .ifPresent(power -> System.out.println("Car's engine power = " + power));
+    }
+
+    public void printInfo(Car car) {
+        Optional.ofNullable(car)
+                .map(Car::getId)
+                .ifPresentOrElse(this::print, () -> print(createNewRandomCar().getId()));
+    }
+
+    public boolean carEquals(Car c1, Car c2) {
+        if (c1.getClass().equals(c2.getClass()) && c1.hashCode() == c2.hashCode()) {
+            return c1.equals(c2);
+        } else {
+            return false;
+        }
+    }
+
     public void create(int count, Car.CarType carType) {
         for (; count > 0; count--) {
-            carArrayRepository.save(createNewCar(carType));
+            createNewCar(carType);
         }
     }
 
@@ -33,8 +79,12 @@ public class CarService {
 
     private void create(int count) {
         for (; count > 0; count--) {
-           createNewCar(RandomGenerator.getRandomCarType());
+            createNewRandomCar();
         }
+    }
+
+    private Car createNewRandomCar() {
+        return createNewCar(RandomGenerator.getRandomCarType());
     }
 
     public Car createNewCar(Car.CarType carType) {
@@ -46,19 +96,19 @@ public class CarService {
                 return createTruck();
             }
             default -> {
-                return null;
+                throw new IllegalArgumentException();
             }
         }
     }
 
-    public Car createPassengerCar() {
+    private Car createPassengerCar() {
         Car car = new PassengerCar(RandomGenerator.getRandomString(),
                 RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
         carArrayRepository.save(car);
         return car;
     }
 
-    public Car createTruck() {
+    private Car createTruck() {
         Car car = new Truck(RandomGenerator.getRandomString(),
                 RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
         carArrayRepository.save(car);
@@ -133,5 +183,9 @@ public class CarService {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("ID shouldn`t be empty");
         }
+    }
+
+    private void printRandomCarColor() {
+        System.out.println(createNewRandomCar().getColor());
     }
 }

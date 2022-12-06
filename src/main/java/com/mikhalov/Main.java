@@ -8,8 +8,6 @@ public class Main {
 
     public static void main(String[] args) {
         CarService carService = new CarService(new CarArrayRepository());
-        carService.createTruck();
-        carService.createPassengerCar();
         int count = carService.create();
         System.out.println(count);
 
@@ -17,8 +15,11 @@ public class Main {
         for (Car car : carService.getAll()) {
             car.restore();
         }
-        carService.printAll();
-
+        carService.printManufacturerAndCount(null);
+        carService.printColor(null);
+       // carService.checkCount(carService.createNewCar(Car.CarType.TRUCK));
+        carService.printEngineInfo(null);
+        carService.printInfo(null);
     }
 }
 
