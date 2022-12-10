@@ -3,9 +3,11 @@ package com.mikhalov.repository;
 import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
 import com.mikhalov.model.PassengerCar;
+import com.mikhalov.util.AlgorithmUtil;
 import lombok.NonNull;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 public class CarArrayRepository {
@@ -53,6 +55,13 @@ public class CarArrayRepository {
             delete(car.getId());
 
         }
+    }
+    public void sortById() {
+        AlgorithmUtil.mergeSort(cars, Comparator.nullsLast(Comparator.comparing(Car::getId)));
+    }
+
+    public int searchById(String id) {
+        return AlgorithmUtil.binarySearch(cars, getById(id), Comparator.nullsLast(Comparator.comparing(Car::getId)));
     }
 
     private void delete(int index, int length) {

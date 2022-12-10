@@ -160,6 +160,14 @@ public class CarService {
         changeColor(id, RandomGenerator.getRandomColor());
     }
 
+    public void sortById() {
+        carArrayRepository.sortById();
+    }
+
+    public int searchById(String id) {
+        return carArrayRepository.searchById(id);
+    }
+
     private void check(Car car) {
         if (car.getEngine() == null) {
             return;
