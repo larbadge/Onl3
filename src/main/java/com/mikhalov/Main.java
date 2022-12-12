@@ -14,8 +14,11 @@ public class Main {
         for (Car car : carService.getAll()) {
             car.restore();
         }
-        carService.printAll();
-
+        carService.printManufacturerAndCount(null);
+        carService.printColor(null);
+       // carService.checkCount(carService.createNewCar(Car.CarType.TRUCK));
+        carService.printEngineInfo(null);
+        carService.printInfo(null);
     }
 }
 
