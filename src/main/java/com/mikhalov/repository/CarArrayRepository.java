@@ -68,8 +68,8 @@ public class CarArrayRepository extends CarRepository {
     }
 
     @Override
-    public int searchById(String id) {
-        return AlgorithmUtil.binarySearch(cars, getById(id), Comparator.nullsLast(Comparator.comparing(Car::getId)));
+    public int getCarIndex(Car car) {
+        return AlgorithmUtil.binarySearch(cars, car, Comparator.nullsLast(Comparator.comparing(Car::getId)));
     }
 
     private void delete(int index, int length) {

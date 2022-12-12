@@ -164,8 +164,8 @@ public class CarService {
         carRepository.sortById();
     }
 
-    public int searchById(String id) {
-        return carRepository.searchById(id);
+    public int getCarIndex(Car car) {
+        return carRepository.getCarIndex(car);
     }
 
     private void check(Car car) {

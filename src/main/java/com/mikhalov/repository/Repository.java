@@ -1,5 +1,4 @@
 package com.mikhalov.repository;
-import com.mikhalov.model.Color;
 
 public interface Repository<T> {
 
@@ -14,11 +13,5 @@ public interface Repository<T> {
     void delete(String id);
 
     void deleteAll();
-
-    void sortById();
-
-    int searchById(String id);
-
-    void updateColor(String id, Color color);
 
 }
