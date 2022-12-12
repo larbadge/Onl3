@@ -3,7 +3,7 @@ package com.mikhalov.service;
 import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
 import com.mikhalov.model.PassengerCar;
-import com.mikhalov.repository.CarArrayRepository;
+import com.mikhalov.repository.CarRepository;
 import com.mikhalov.util.RandomGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,18 +20,16 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CarServiceTest {
     CarService target;
-    CarArrayRepository repository;
+    CarRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(CarArrayRepository.class);
+        repository = Mockito.mock(CarRepository.class);
         target = new CarService(repository);
     }
 

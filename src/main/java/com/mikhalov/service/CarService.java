@@ -1,7 +1,7 @@
 package com.mikhalov.service;
 
 import com.mikhalov.model.*;
-import com.mikhalov.repository.CarArrayRepository;
+import com.mikhalov.repository.CarRepository;
 import com.mikhalov.util.RandomGenerator;
 
 import java.util.Arrays;
@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public class CarService {
 
-    private final CarArrayRepository carArrayRepository;
+    private final CarRepository carRepository;
 
-    public CarService(final CarArrayRepository carArrayRepository) {
-        this.carArrayRepository = carArrayRepository;
+    public CarService(final CarRepository carRepository) {
+        this.carRepository = carRepository;
     }
 
     public void printManufacturerAndCount(Car car) {
@@ -68,7 +68,7 @@ public class CarService {
     }
 
     public int create() {
-        int count = RandomGenerator.generateRandomNum();
+        int count = RandomGenerator.generateRandomPositiveNumBoundTen();
         if (count == 0) {
             return -1;
         }
@@ -100,14 +100,14 @@ public class CarService {
     private Car createPassengerCar() {
         Car car = new PassengerCar(RandomGenerator.getRandomString(),
                 RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
-        carArrayRepository.save(car);
+        carRepository.save(car);
         return car;
     }
 
     private Car createTruck() {
         Car car = new Truck(RandomGenerator.getRandomString(),
                 RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
-        carArrayRepository.save(car);
+        carRepository.save(car);
         return car;
     }
 
@@ -116,27 +116,27 @@ public class CarService {
             throw new IllegalArgumentException("index less than 0");
         }
         if (car != null) {
-            carArrayRepository.insert(car, index);
+            carRepository.insert(car, index);
         }
     }
 
     public Car find(String id) {
         checkId(id);
-        return carArrayRepository.getById(id);
+        return carRepository.getById(id);
     }
 
     public void delete(String id) {
         checkId(id);
-        carArrayRepository.delete(id);
+        carRepository.delete(id);
     }
 
     public Car[] getAll() {
-        return carArrayRepository.getAll();
+        return carRepository.getAll();
     }
 
     public void print(String id) {
         checkId(id);
-        System.out.println(carArrayRepository.getById(id));
+        System.out.println(carRepository.getById(id));
     }
 
     public void printAll() {
@@ -153,7 +153,7 @@ public class CarService {
 
     public void changeColor(String id, Color color) {
         checkId(id);
-        carArrayRepository.updateColor(id, color);
+        carRepository.updateColor(id, color);
     }
 
     public void changeColor(String id) {
@@ -161,11 +161,11 @@ public class CarService {
     }
 
     public void sortById() {
-        carArrayRepository.sortById();
+        carRepository.sortById();
     }
 
     public int searchById(String id) {
-        return carArrayRepository.searchById(id);
+        return carRepository.searchById(id);
     }
 
     private void check(Car car) {
