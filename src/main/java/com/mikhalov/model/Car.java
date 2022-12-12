@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -34,6 +35,21 @@ public abstract class Car implements CountRestore {
     public enum CarType {
         CAR,
         TRUCK
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return Objects.equals(manufacturer, car.manufacturer)
+                && Objects.equals(engine, car.engine)
+                && color == car.color && Objects.equals(id, car.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(manufacturer, engine, color, id);
     }
 
     @Override

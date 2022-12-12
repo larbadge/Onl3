@@ -10,7 +10,6 @@ public class Main {
         CarService carService = new CarService(new CarArrayRepository());
         int count = carService.create();
         System.out.println(count);
-
         System.out.println();
         for (Car car : carService.getAll()) {
             car.restore();
