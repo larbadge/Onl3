@@ -5,7 +5,6 @@ import com.mikhalov.model.Color;
 import com.mikhalov.model.PassengerCar;
 import com.mikhalov.util.AlgorithmUtil;
 import lombok.NonNull;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;

@@ -12,6 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         CarService carService = new CarService(new CarArrayRepository());
+
         carService.create(5, Car.CarType.TRUCK);
         for (var car :
                 carService.getAll()) {
@@ -22,6 +23,7 @@ public class Main {
         for (var car :
                 carService.getAll()) {
             System.out.print(car.getId() + "; ");
+
         }
         System.out.println();
         System.out.println(carService.searchById(carService.getAll()[3].getId()));
