@@ -1,32 +1,9 @@
 package com.mikhalov.util;
 
-import com.mikhalov.model.Car;
-import com.mikhalov.repository.CarArrayRepository;
-import com.mikhalov.service.CarService;
-
 import java.util.Arrays;
 import java.util.Comparator;
 
 public class AlgorithmUtil {
-
-
-
-    public static void main(String[] args) {
-        CarService carService = new CarService(new CarArrayRepository());
-        carService.create(5, Car.CarType.TRUCK);
-        Car[] cars = carService.getAll();
-        for (var car :
-                cars) {
-            System.out.print(car.getId() + "; ");
-        }
-        System.out.println("\n");
-        mergeSort(cars, Comparator.comparing(Car::getId));
-        for (var car :
-                cars) {
-            System.out.print(car.getId() + "; ");
-        }
-
-    }
 
     public static <T> void mergeSort(T[] array, Comparator<T> comp) {
 

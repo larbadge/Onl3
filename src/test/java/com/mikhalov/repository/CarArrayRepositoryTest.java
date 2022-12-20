@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CarArrayRepositoryTest {
-    CarArrayRepository repository;
+    CarRepository repository;
     Car car;
 
 
@@ -151,7 +151,7 @@ class CarArrayRepositoryTest {
 
     @Test
     void findLengthTest() {
-        int count = RandomGenerator.generateRandomNum();
+        int count = RandomGenerator.generateRandomPositiveNumBoundTen();
         for (int i = 0; i < count; i++) {
             repository.save(new PassengerCar());
         }

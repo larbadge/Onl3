@@ -10,8 +10,12 @@ public class RandomGenerator {
 
     private static final Random random = new Random();
 
-    public static int generateRandomNum() {
+    public static int generateRandomPositiveNumBoundTen() {
         return random.nextInt(0, 11);
+    }
+
+    public static int generateRandomNumForIncreaseCount() {
+        return random.nextInt(100, 301);
     }
 
     public static String getRandomString() {
