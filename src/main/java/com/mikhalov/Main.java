@@ -9,12 +9,12 @@ public class Main {
 
     public static void main(String[] args) {
         CarService carService = new CarService(new CarArrayRepository());
+
         GenericCarContainer<Car> genericCarContainer = new GenericCarContainer<>(carService.createNewCar(Car.CarType.CAR));
         genericCarContainer.increaseCount(3.6);
         genericCarContainer.print();
         genericCarContainer.increaseCount();
         genericCarContainer.print();
-
     }
 }
 

@@ -15,6 +15,7 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+
     public void printManufacturerAndCount(Car car) {
         Optional.ofNullable(car)
                 .ifPresent(c -> System.out.printf("Manufacturer: %s, count = %d%n", c.getManufacturer(), c.getCount()));
@@ -53,6 +54,7 @@ public class CarService {
                 .ifPresentOrElse(this::print, () -> print(createNewRandomCar().getId()));
     }
 
+
     public boolean carEquals(Car c1, Car c2) {
         if (c1.getClass().equals(c2.getClass()) && c1.hashCode() == c2.hashCode()) {
             return c1.equals(c2);
@@ -79,7 +81,9 @@ public class CarService {
 
     private void create(int count) {
         for (; count > 0; count--) {
+
             createNewRandomCar();
+
         }
     }
 
