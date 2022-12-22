@@ -1,5 +1,8 @@
 package com.mikhalov.model;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class Engine {
 
     private EngineType type;
