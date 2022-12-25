@@ -16,6 +16,105 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+
+    public Map<String, Object> carToMap(Car car) {
+        Map<String, Object> carFields = new HashMap<>();
+        carFields.put("id", car.getId());
+        carFields.put("type", car.getCarType());
+        carFields.put("manufacturer", car.getManufacturer());
+        carFields.put("engine", car.getEngine());
+        carFields.put("color", car.getColor());
+        carFields.put("count", car.getCount());
+        carFields.put("price", car.getPrice());
+        int passengerCount = 0;
+        int loadCapacity = 0;
+        if (car.getClass() == PassengerCar.class) {
+            PassengerCar car1 = (PassengerCar) car;
+            passengerCount = car1.getPassengerCount();
+        }
+        if (car.getClass() == Truck.class) {
+            Truck car1 = (Truck) car;
+            loadCapacity = car1.getLoadCapacity();
+        }
+        carFields.put("passengerCount",passengerCount);
+        carFields.put("loadCapacity", loadCapacity);
+
+        return carFields;
+    }
+
+    public List<Map<String, Object>> toListOfMap(List<Car> cars) {
+        return cars.stream()
+                .map(this::carToMap)
+                .collect(Collectors.toList());
+    }
+
+    public Car mapToObject(final Map<String, Object> map) {
+        Car.CarType carType = (Car.CarType) map.getOrDefault("type", Car.CarType.CAR);
+        String id = (String) map.getOrDefault("id", "null");
+        String manufacturer = (String) map.getOrDefault("manufacturer", "null");
+        Engine engine = (Engine) map.getOrDefault("engine", new Engine());
+        Color color = (Color) map.getOrDefault("color", null);
+        int count = (int) map.getOrDefault("count", 0);
+        int price = (int) map.getOrDefault("price", 0);
+        int passengerCount = (int) map.getOrDefault("passengerCount", 0);
+        int loadCapacity = (int) map.getOrDefault("loadCapacity", 0);
+
+        if (carType.equals(Car.CarType.CAR)) {
+            return new PassengerCar(id, manufacturer, engine, color, count, price, passengerCount);
+        } else {
+            return new Truck(id, manufacturer, engine, color, count, price, loadCapacity);
+        }
+    }
+
+    public List<Car> toListOfCars(List<Map<String, Object>> maps) {
+        return maps.stream()
+                .map(this::mapToObject)
+                .collect(Collectors.toList());
+    }
+
+    public void findManufacturerByPrice(List<Car> cars, int price) {
+        cars.stream()
+                .filter(car -> car.getPrice() > price)
+                .map(Car::getManufacturer)
+                .forEach(System.out::println);
+    }
+
+    public int countSum(List<Car> cars) {
+        return cars.stream()
+                .map(Car::getCount)
+                .reduce(0, Integer::sum);
+    }
+
+    public Map<String, Car.CarType> mapToMap(List<Car> cars) {
+        return cars.stream()
+                .sorted(Comparator.comparing(Car::getManufacturer))
+                .distinct()
+                .collect(Collectors.toMap(Car::getId, Car::getCarType, (a, b) -> b));
+    }
+
+    public String statistic(List<Car> cars) {
+        return cars.stream()
+                .mapToInt(Car::getPrice)
+                .summaryStatistics()
+                .toString();
+    }
+
+    public boolean priceCheck(List<Car> cars, int price) {
+        return cars.stream()
+                .mapToInt(Car::getPrice)
+                .allMatch(val -> val > price);
+    }
+
+    public Map<Color, Integer> innerList(List<List<Car>> cars, int price) {
+        return cars.stream()
+                .flatMap(Collection::stream)
+                .sorted(Comparator.comparing(Car::getColor))
+                .distinct()
+                .peek(System.out::println)
+                .filter(val -> val.getPrice() > price)
+                .collect(Collectors.toMap(Car::getColor, Car::getCount, Integer::sum));
+    }
+
     public Map<String, Integer> toMapManufactCount(List<Car> cars) {
         return cars.stream()
                 .collect(Collectors.toMap(Car::getManufacturer, Car::getCount));
@@ -61,7 +160,8 @@ public class CarService {
                     System.out.println("No car, new random car will be created");
                     return Optional.of(createNewRandomCar());
                 })
-                .map(c -> c.getEngine().getPower())
+                .map(Car::getEngine)
+                .map(Engine::getPower)
                 .ifPresent(power -> System.out.println("Car's engine power = " + power));
     }
 

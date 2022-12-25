@@ -1,46 +1,44 @@
 package com.mikhalov;
 
-import com.mikhalov.container.CarComparator;
-import com.mikhalov.container.CarTree;
-import com.mikhalov.container.GenericCarContainer;
 import com.mikhalov.model.Car;
-import com.mikhalov.model.Engine;
 import com.mikhalov.repository.CarArrayRepository;
 import com.mikhalov.service.CarService;
-import com.mikhalov.util.RandomGenerator;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+import java.util.stream.Stream;
 
 public class Main {
 
     public static void main(String[] args) {
         CarService carService = new CarService(new CarArrayRepository());
         carService.create();
-        CarTree carTree = new CarTree(new CarComparator());
-        for (var car : carService.getAll()) {
-            new GenericCarContainer<>(car).increaseCount();
-            carTree.add(car);
-        }
-        System.out.println(carTree.summaryCount());
-        carTree.traverseInOrder();
-        System.out.println();
+
         List<Car> cars = Arrays.asList(carService.getAll());
-        Map<String, Integer> stringCarMap = carService.toMapManufactCount(cars);
-        Map<Integer, Car> integerCarMap = carService.toMapEnginePowerCar(cars);
-        Map<Engine.EngineType, List<Car>> engineListMap = carService.toMapListOfCarsSameEnginType(cars);
-        System.out.println(stringCarMap);
-        System.out.println();
-        System.out.println(integerCarMap);
-        System.out.println();
-        for (var set : engineListMap.entrySet()) {
-            System.out.println(set);
-        }
+
+        carService.findManufacturerByPrice(cars, 15000);
+        System.out.println(carService.countSum(cars));
+        System.out.println(carService.mapToMap(cars));
+        System.out.println(carService.statistic(cars));
+        System.out.println(carService.priceCheck(cars, 12000));
+        CarService carService1 = new CarService(new CarArrayRepository());
+        carService.create();
+        List<Car> cars1 = Arrays.asList(carService1.getAll());
+        List<List<Car>> carsLists = List.of(cars, cars1);
+        System.out.println(carService.innerList(carsLists, 10000));
+
+        Car newCar = carService.createNewCar(Car.CarType.CAR);
+        Car car = carService.mapToObject(carService.carToMap(newCar));
+        System.out.println(newCar);
+        System.out.println(car);
+        System.out.println(car.equals(newCar));
+
+        List<Map<String, Object>> maps = carService.toListOfMap(cars);
+        List<Car> cars2 = carService.toListOfCars(maps);
+        System.out.println(cars2);
+
     }
-
-
 }
-
 
