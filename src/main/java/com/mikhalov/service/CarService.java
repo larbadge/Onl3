@@ -5,12 +5,14 @@ import com.mikhalov.repository.CarRepository;
 import com.mikhalov.util.RandomGenerator;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CarService {
 
     private final CarRepository carRepository;
+    private final Function<Map<String, Object>, Car> mapper = this::createCarByMap;
 
     public CarService(final CarRepository carRepository) {
         this.carRepository = carRepository;
@@ -49,6 +51,11 @@ public class CarService {
     }
 
     public Car mapToObject(final Map<String, Object> map) {
+        return mapper.apply(map);
+
+    }
+
+    private Car createCarByMap(final Map<String, Object> map) {
         Car.CarType carType = (Car.CarType) map.getOrDefault("type", Car.CarType.CAR);
         String id = (String) map.getOrDefault("id", "null");
         String manufacturer = (String) map.getOrDefault("manufacturer", "null");
@@ -68,7 +75,7 @@ public class CarService {
 
     public List<Car> toListOfCars(List<Map<String, Object>> maps) {
         return maps.stream()
-                .map(this::mapToObject)
+                .map(mapper)
                 .collect(Collectors.toList());
     }
 
@@ -89,7 +96,7 @@ public class CarService {
         return cars.stream()
                 .sorted(Comparator.comparing(Car::getManufacturer))
                 .distinct()
-                .collect(Collectors.toMap(Car::getId, Car::getCarType, (a, b) -> b));
+                .collect(Collectors.toMap(Car::getId, Car::getCarType, (a, b) -> b,  LinkedHashMap::new));
     }
 
     public String statistic(List<Car> cars) {
