@@ -5,9 +5,7 @@ import com.mikhalov.model.PassengerCar;
 import com.mikhalov.repository.CarArrayRepository;
 import com.mikhalov.service.CarService;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Main {
 
