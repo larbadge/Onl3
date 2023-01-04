@@ -1,0 +1,43 @@
+{
+  "cars": [
+    {
+      "type": "CAR",
+      "manufacturer": "Audi",
+      "engine": {
+        "engin_type": "PETROL",
+        "power": "800"
+      },
+      "color": "RED",
+      "count": "5",
+      "price": "50000",
+      "id": "SQE111",
+      "passengerCount": "2"
+    },
+    {
+      "type": "CAR",
+      "manufacturer": "BMW",
+      "engine": {
+        "engin_type": "E_CAR",
+        "power": "500"
+      },
+      "color": "BLACK",
+      "count": "5",
+      "price": "35000",
+      "id": "SQE112",
+      "passengerCount": "5"
+    },
+    {
+      "type": "CAR",
+      "manufacturer": "Nissan",
+      "engine": {
+        "engin_type": "GAS",
+        "power": "200"
+      },
+      "color": "YELLOW",
+      "count": "100",
+      "price": "15000",
+      "id": "SQE132",
+      "passengerCount": "7"
+    }
+  ]
+}
