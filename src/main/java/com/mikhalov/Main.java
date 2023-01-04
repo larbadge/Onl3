@@ -1,34 +1,46 @@
 package com.mikhalov;
 
-import com.mikhalov.container.CarList;
+import com.mikhalov.container.CarComparator;
+import com.mikhalov.container.CarTree;
+import com.mikhalov.container.GenericCarContainer;
 import com.mikhalov.model.Car;
+import com.mikhalov.model.Engine;
 import com.mikhalov.repository.CarArrayRepository;
 import com.mikhalov.service.CarService;
+import com.mikhalov.util.RandomGenerator;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class Main {
 
     public static void main(String[] args) {
         CarService carService = new CarService(new CarArrayRepository());
-
-        CarList<Car> list = new CarList<>();
-        list.add(carService.createNewCar(Car.CarType.CAR));
-        list.add(carService.createNewCar(Car.CarType.CAR));
-        list.add(null);
-        list.add(carService.createNewCar(Car.CarType.CAR));
-        list.add(carService.createNewCar(Car.CarType.CAR));
-        System.out.println(list.getSize());
-        list.add(null);
-        list.addFirst(null);
-        list.deleteAllNullValues();
-        list.printAll();
-
+        carService.create();
+        CarTree carTree = new CarTree(new CarComparator());
+        for (var car : carService.getAll()) {
+            new GenericCarContainer<>(car).increaseCount();
+            carTree.add(car);
+        }
+        System.out.println(carTree.summaryCount());
+        carTree.traverseInOrder();
         System.out.println();
-        for (Car car : list) {
-            System.out.println("ITERATOR!!!");
-            System.out.println(car);
+        List<Car> cars = Arrays.asList(carService.getAll());
+        Map<String, Integer> stringCarMap = carService.toMapManufactCount(cars);
+        Map<Integer, Car> integerCarMap = carService.toMapEnginePowerCar(cars);
+        Map<Engine.EngineType, List<Car>> engineListMap = carService.toMapListOfCarsSameEnginType(cars);
+        System.out.println(stringCarMap);
+        System.out.println();
+        System.out.println(integerCarMap);
+        System.out.println();
+        for (var set : engineListMap.entrySet()) {
+            System.out.println(set);
         }
 
     }
+
 
 }
 

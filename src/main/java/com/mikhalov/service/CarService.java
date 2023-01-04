@@ -4,8 +4,9 @@ import com.mikhalov.model.*;
 import com.mikhalov.repository.CarRepository;
 import com.mikhalov.util.RandomGenerator;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CarService {
 
@@ -15,6 +16,22 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+    public Map<String, Integer> toMapManufactCount(List<Car> cars) {
+        return cars.stream()
+                .collect(Collectors.toMap(Car::getManufacturer, Car::getCount));
+    }
+
+    public Map<Integer, Car> toMapEnginePowerCar(List<Car> cars) {
+        return cars.stream()
+                .collect(Collectors.toMap(car -> car.getEngine().getPower(), car -> car));
+    }
+
+    public Map<Engine.EngineType, List<Car>> toMapListOfCarsSameEnginType(List<Car> cars) {
+        return cars.stream()
+                .collect(Collectors.toMap(car -> car.getEngine().getType(), List::of,
+                        (a, b) -> Stream.concat(a.stream(), b.stream())
+                        .collect(Collectors.toList())));
+    }
 
     public void printManufacturerAndCount(Car car) {
         Optional.ofNullable(car)
@@ -75,7 +92,7 @@ public class CarService {
             return -1;
         }
         create(count);
-        printAll();
+       // printAll();
         return count;
     }
 
