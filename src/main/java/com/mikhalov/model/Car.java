@@ -42,7 +42,9 @@ public abstract class Car implements CountRestore {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return Objects.equals(manufacturer, car.manufacturer) && Objects.equals(engine, car.engine) && color == car.color && Objects.equals(id, car.id);
+        return Objects.equals(manufacturer, car.manufacturer)
+                && Objects.equals(engine, car.engine)
+                && color == car.color && Objects.equals(id, car.id);
     }
 
     @Override
