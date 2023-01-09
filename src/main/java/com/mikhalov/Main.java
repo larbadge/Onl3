@@ -1,8 +1,8 @@
 package com.mikhalov;
 
 import com.mikhalov.model.Car;
-import com.mikhalov.model.PassengerCar;
-import com.mikhalov.repository.CarArrayRepository;
+import com.mikhalov.repository.CarListRepo;
+import com.mikhalov.repository.CarMapRepo;
 import com.mikhalov.service.CarService;
 
 import java.util.List;
@@ -10,16 +10,18 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        CarService carService = new CarService(new CarArrayRepository());
-        List<Car> cars = carService.carsFromFile("carlist.xml");
-        cars.forEach(System.out::println);
+        CarService carService = new CarService(new CarMapRepo());
+        carService.create();
+        List<Car> all = carService.getAll();
+        all.forEach(System.out::println);
 
         System.out.println();
 
-        List<Car> cars1 = carService.carsFromFile("carlist.json");
-        cars1.forEach(System.out::println);
-        PassengerCar pc = (PassengerCar) cars1.get(1);
-        System.out.println(pc.getPassengerCount());
+        CarService carService1 = new CarService(new CarListRepo());
+        carService1.create();
+        List<Car> all1 = carService1.getAll();
+        all1.forEach(System.out::println);
     }
+
 }
 

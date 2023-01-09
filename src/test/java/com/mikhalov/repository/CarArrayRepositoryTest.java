@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,7 @@ class CarArrayRepositoryTest {
     @Test
     void saveTest() {
         repository.save(car);
-        assertEquals(car, repository.getById(car.getId()));
+        assertEquals(car, repository.getById(car.getId()).get());
     }
 
     @Test
@@ -56,10 +57,10 @@ class CarArrayRepositoryTest {
                 RandomGenerator.getRandomEngine(), RandomGenerator.getRandomColor());
         repository.insert(carToInsert, 1);
         repository.insert(carToInsert2, 5);
-        Car[] cars = repository.getAll();
-        assertEquals(car, cars[2]);
-        assertEquals(carToInsert, cars[1]);
-        assertEquals(carToInsert2, cars[3]);
+        List<Car> cars = repository.getAll();
+        assertEquals(car, cars.get(2));
+        assertEquals(carToInsert, cars.get(1));
+        assertEquals(carToInsert2, cars.get(3));
     }
 
     @Test
@@ -69,13 +70,13 @@ class CarArrayRepositoryTest {
         repository.save(new Truck());
         repository.save(new PassengerCar());
         repository.deleteAll();
-        assertEquals(0, repository.getAll().length);
+        assertEquals(0, repository.getAll().size());
     }
 
     @Test
     void getByIdTest() {
         repository.save(car);
-        Car actual = repository.getById(car.getId());
+        Car actual = repository.getById(car.getId()).get();
         assertEquals(car, actual);
     }
 
@@ -85,9 +86,9 @@ class CarArrayRepositoryTest {
         repository.save(new Truck());
         repository.save(new PassengerCar());
         repository.save(car);
-        Car[] cars = repository.getAll();
-        assertEquals(4, cars.length);
-        assertEquals(car, cars[3]);
+        List<Car> cars = repository.getAll();
+        assertEquals(4, cars.size());
+        assertEquals(car, cars.get(3));
     }
 
     @Test
@@ -110,15 +111,9 @@ class CarArrayRepositoryTest {
         try {
             Method method = CarArrayRepository.class.getDeclaredMethod("indexById", String.class);
             method.setAccessible(true);
-            var exception = assertThrows(NoSuchElementException.class, () -> {
-                try {
-                    method.invoke(repository, id);
-                } catch (InvocationTargetException e) {
-                    throw e.getCause();
-                }
-            });
-            assertEquals("Wrong ID", exception.getMessage());
-        } catch (Exception e) {
+            int index = (int) method.invoke(repository, id);
+            assertEquals(-1, index);
+        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
             e.printStackTrace();
         }
     }

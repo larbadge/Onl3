@@ -1,8 +1,12 @@
 package com.mikhalov.service;
 
+import com.mikhalov.container.CarList;
 import com.mikhalov.model.Car;
 import com.mikhalov.model.Color;
 import com.mikhalov.model.PassengerCar;
+import com.mikhalov.repository.CarArrayRepository;
+import com.mikhalov.repository.CarListRepo;
+import com.mikhalov.repository.CarMapRepo;
 import com.mikhalov.repository.CarRepository;
 import com.mikhalov.util.RandomGenerator;
 import org.junit.jupiter.api.Assertions;
@@ -20,6 +24,7 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,20 +34,20 @@ class CarServiceTest {
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(CarRepository.class);
+        repository = Mockito.mock(CarMapRepo.class);
         target = new CarService(repository);
     }
 
     @Test
     void createNewCarTest() {
-        Assertions.assertNotNull(target.createNewCar(Car.CarType.CAR));
+        assertNotNull(target.createNewCar(Car.CarType.CAR));
     }
 
     @Test
     void createTest() {
-        Mockito.doReturn(new Car[0]).when(repository).getAll();
+      //  Mockito.doReturn(Collections.emptyList()).when(repository).getAll();
         int expected = target.create();
-        Assertions.assertTrue(expected == -1 || (expected > 0 && expected <= 10));
+        assertTrue(expected == -1 || (expected > 0 && expected <= 10));
     }
 
     @Test

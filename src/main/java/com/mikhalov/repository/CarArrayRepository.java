@@ -5,9 +5,7 @@ import com.mikhalov.model.Color;
 import com.mikhalov.util.AlgorithmUtil;
 import lombok.NonNull;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class CarArrayRepository extends CarRepository {
 
@@ -32,24 +30,33 @@ public class CarArrayRepository extends CarRepository {
     }
 
     @Override
-    public Car getById(String id) {
-        return cars[indexById(id)];
+    public Optional<Car> getById(String id) {
+        int index = indexById(id);
+        if (index == -1) {
+            return Optional.empty();
+        } else return Optional.of(cars[index]);
     }
 
     @Override
-    public Car[] getAll() {
-        return Arrays.copyOf(cars, findLength());
+    public List<Car> getAll() {
+        return List.of(Arrays.copyOf(cars, findLength()));
     }
 
     @Override
     public void updateColor(String id, Color color) {
         int index = indexById(id);
+        if (index == -1) {
+            throw new IllegalArgumentException("Wrong ID");
+        }
         cars[index].setColor(color);
     }
 
     @Override
     public void delete(String id) {
         int index = indexById(id);
+        if (index == -1) {
+            throw new IllegalArgumentException("Wrong ID");
+        }
         int length = findLength();
         delete(index, length);
     }
@@ -69,6 +76,11 @@ public class CarArrayRepository extends CarRepository {
 
     @Override
     public int getCarIndex(Car car) {
+        return indexById(car.getId());
+    }
+
+    public int sortAndGetCarIndex(Car car) {
+        sortById();
         return AlgorithmUtil.binarySearch(cars, car, Comparator.nullsLast(Comparator.comparing(Car::getId)));
     }
 
@@ -113,7 +125,7 @@ public class CarArrayRepository extends CarRepository {
             }
             index++;
         }
-        throw new NoSuchElementException("Wrong ID");
+        return -1;
     }
 
     private void putCar(Car car) {

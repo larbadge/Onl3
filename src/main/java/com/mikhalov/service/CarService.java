@@ -284,7 +284,6 @@ public class CarService {
             return -1;
         }
         create(count);
-        // printAll();
         return count;
     }
 
@@ -333,7 +332,7 @@ public class CarService {
 
     public Car find(String id) {
         checkId(id);
-        return carRepository.getById(id);
+        return carRepository.getById(id).orElseThrow(() -> new NoSuchElementException("Not found car with ID: " + id));
     }
 
     public void delete(String id) {
@@ -341,7 +340,7 @@ public class CarService {
         carRepository.delete(id);
     }
 
-    public Car[] getAll() {
+    public List<Car> getAll() {
         return carRepository.getAll();
     }
 
