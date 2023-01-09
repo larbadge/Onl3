@@ -4,8 +4,14 @@ import com.mikhalov.model.*;
 import com.mikhalov.repository.CarRepository;
 import com.mikhalov.util.RandomGenerator;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,16 +24,93 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+    public List<Car> carsFromFile(String filePathInResources) {
+         if (filePathInResources.endsWith(".xml")) {
+            return carsFromXml(filePathInResources);
+         } else if (filePathInResources.endsWith(".json")) {
+             return carsFromJson(filePathInResources);
+         } else {
+             throw new IllegalArgumentException("Unsupported file extension");
+         }
+    }
+
+    private List<Car> carsFromXml(String path) {
+        List<String> strings = splitXmlByCar(path);
+        List<Map<String, Object>> maps = new ArrayList<>();
+        strings.forEach(str -> maps.add(xmlToMap(str)));
+        return toListOfCars(maps);
+    }
+
+    private List<Car> carsFromJson(String path) {
+        List<String> strings = splitJsonByCar(path);
+        List<Map<String, Object>> maps = new ArrayList<>();
+        strings.forEach(str -> maps.add(jsonToMap(str)));
+        return toListOfCars(maps);
+    }
+
+
+    private Map<String, Object> xmlToMap(String str) {
+        return fileToMap(str, "<(.*)>(.*)</");
+    }
+
+    private Map<String, Object> jsonToMap(String str) {
+        return fileToMap(str, "\"(.*)\": \"(.*)\"");
+    }
+
+    private Map<String, Object> fileToMap(String str, String regex) {
+        final Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        Map<String, Object> map = new HashMap<>();
+        while (matcher.find()) {
+            map.put(matcher.group(1), matcher.group(2));
+        }
+        String engineTypeStr = (String) map.getOrDefault("engin_type", "GAS");
+        map.remove("engin_type");
+        Engine.EngineType engineType = Engine.EngineType.valueOf(engineTypeStr);
+        int power = Integer.parseInt((String) map.getOrDefault("power", "0"));
+        map.remove("power");
+        map.put("engine", new Engine(engineType, power));
+
+        return map;
+    }
+
+    private String readFile(String file) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        StringBuilder sb = new StringBuilder();
+        try (InputStream input = loader.getResourceAsStream(file);
+             BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(input)))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append(System.lineSeparator());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+    private List<String> splitXmlByCar(String filePath) {
+        String str = readFile(filePath);
+        return Arrays.stream(str.split("</car>\\R\\s*<car>"))
+                .collect(Collectors.toList());
+    }
+
+
+    public List<String> splitJsonByCar(String filePath) {
+        String str = readFile(filePath);
+        return Arrays.stream(str.split(",\\R\\s*\\{"))
+                .collect(Collectors.toList());
+    }
 
     public Map<String, Object> carToMap(Car car) {
         Map<String, Object> carFields = new HashMap<>();
         carFields.put("id", car.getId());
-        carFields.put("type", car.getCarType());
+        carFields.put("type", car.getCarType().toString());
         carFields.put("manufacturer", car.getManufacturer());
         carFields.put("engine", car.getEngine());
-        carFields.put("color", car.getColor());
-        carFields.put("count", car.getCount());
-        carFields.put("price", car.getPrice());
+        carFields.put("color", car.getColor().toString());
+        carFields.put("count", String.valueOf(car.getCount()));
+        carFields.put("price", String.valueOf(car.getPrice()));
         int passengerCount = 0;
         int loadCapacity = 0;
         if (car.getClass() == PassengerCar.class) {
@@ -38,8 +121,8 @@ public class CarService {
             Truck car1 = (Truck) car;
             loadCapacity = car1.getLoadCapacity();
         }
-        carFields.put("passengerCount",passengerCount);
-        carFields.put("loadCapacity", loadCapacity);
+        carFields.put("passengerCount", String.valueOf(passengerCount));
+        carFields.put("loadCapacity", String.valueOf(loadCapacity));
 
         return carFields;
     }
@@ -56,15 +139,17 @@ public class CarService {
     }
 
     private Car createCarByMap(final Map<String, Object> map) {
-        Car.CarType carType = (Car.CarType) map.getOrDefault("type", Car.CarType.CAR);
+        String carTypeStr = (String) map.getOrDefault("type", "CAR");
+        Car.CarType carType = Car.CarType.valueOf(carTypeStr);
         String id = (String) map.getOrDefault("id", "null");
         String manufacturer = (String) map.getOrDefault("manufacturer", "null");
         Engine engine = (Engine) map.getOrDefault("engine", new Engine());
-        Color color = (Color) map.getOrDefault("color", null);
-        int count = (int) map.getOrDefault("count", 0);
-        int price = (int) map.getOrDefault("price", 0);
-        int passengerCount = (int) map.getOrDefault("passengerCount", 0);
-        int loadCapacity = (int) map.getOrDefault("loadCapacity", 0);
+        String colorStr = (String) map.getOrDefault("color", "BLACK");
+        Color color = Color.valueOf(colorStr);
+        int count = Integer.parseInt((String) map.getOrDefault("count", "0"));
+        int price = Integer.parseInt((String) map.getOrDefault("price", "0"));
+        int passengerCount = Integer.parseInt((String) map.getOrDefault("passengerCount", "0"));
+        int loadCapacity = Integer.parseInt((String) map.getOrDefault("loadCapacity", "0"));
 
         if (carType.equals(Car.CarType.CAR)) {
             return new PassengerCar(id, manufacturer, engine, color, count, price, passengerCount);
@@ -96,7 +181,7 @@ public class CarService {
         return cars.stream()
                 .sorted(Comparator.comparing(Car::getManufacturer))
                 .distinct()
-                .collect(Collectors.toMap(Car::getId, Car::getCarType, (a, b) -> b,  LinkedHashMap::new));
+                .collect(Collectors.toMap(Car::getId, Car::getCarType, (a, b) -> b, LinkedHashMap::new));
     }
 
     public String statistic(List<Car> cars) {
@@ -127,16 +212,17 @@ public class CarService {
                 .collect(Collectors.toMap(Car::getManufacturer, Car::getCount));
     }
 
-    public Map<Integer, Car> toMapEnginePowerCar(List<Car> cars) {
+    public Map<Integer, List<Car>> toMapEnginePowerCar(List<Car> cars) {
         return cars.stream()
-                .collect(Collectors.toMap(car -> car.getEngine().getPower(), car -> car));
+                .collect(Collectors.groupingBy(car -> car.getEngine().getPower()));
+                        //toMap(car -> car.getEngine().getPower(), car -> car));
     }
 
     public Map<Engine.EngineType, List<Car>> toMapListOfCarsSameEnginType(List<Car> cars) {
         return cars.stream()
                 .collect(Collectors.toMap(car -> car.getEngine().getType(), List::of,
                         (a, b) -> Stream.concat(a.stream(), b.stream())
-                        .collect(Collectors.toList())));
+                                .collect(Collectors.toList())));
     }
 
     public void printManufacturerAndCount(Car car) {
@@ -199,7 +285,7 @@ public class CarService {
             return -1;
         }
         create(count);
-       // printAll();
+        // printAll();
         return count;
     }
 
