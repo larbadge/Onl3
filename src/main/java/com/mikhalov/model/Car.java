@@ -18,18 +18,30 @@ public abstract class Car implements CountRestore {
     private int count;
     private int price;
     private final String id;
+    private CarType carType;
 
     public Car() {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Car(String manufacturer, Engine engine, Color color) {
+    public Car(String manufacturer, Engine engine, Color color, CarType carType) {
         this.manufacturer = manufacturer;
         this.engine = engine;
         this.color = color;
+        this.carType = carType;
         this.count = 1;
         this.price = (int) (Math.random() * 10001 + 10000);
         this.id = UUID.randomUUID().toString();
+    }
+
+    protected Car (String id, String manufacturer, Engine engine, Color color, CarType carType, int count, int price) {
+        this.id = id;
+        this.manufacturer = manufacturer;
+        this.engine = engine;
+        this.color = color;
+        this.carType = carType;
+        this.count = count;
+        this.price = price;
     }
 
     public enum CarType {

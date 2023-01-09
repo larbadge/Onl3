@@ -2,11 +2,17 @@ package com.mikhalov.model;
 
 import lombok.EqualsAndHashCode;
 
+import java.util.Optional;
+
 @EqualsAndHashCode
 public class Engine {
 
     private EngineType type;
     private int power;
+
+    public Engine() {
+
+    }
 
     public Engine(EngineType type, int power) {
         this.type = type;
@@ -31,7 +37,10 @@ public class Engine {
 
     @Override
     public String toString() {
-        return String.format("type - %s, power %d", type.toString(), power);
+        return String.format("type - %s, power %d",
+                Optional.ofNullable(type)
+                        .map(Engine.EngineType::toString)
+                        .orElse("null"), power);
     }
 
     public enum EngineType {
